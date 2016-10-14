@@ -2,8 +2,8 @@
 $ErrorActionPreference = 'stop'
 Set-StrictMode -Version latest
 
-$script:DSCModuleName      = 'xAppFabric'
-$script:DSCResourceName    = 'MSFT_xAFInstallCumulativeUpdate'
+$script:DSCModuleName      = 'AppFabricDsc'
+$script:DSCResourceName    = 'MSFT_AFInstallCumulativeUpdate'
 
 #region HEADER
 
@@ -27,7 +27,7 @@ $TestEnvironment = Initialize-TestEnvironment `
 # Begin Testing
 try
 {
-    Describe "SPInstallAppFabricUpdate - AppFabric Build $((Get-Item $SharePointCmdletModule).Directory.BaseName)" {
+    Describe "AFInstallCumulativeUpdate - AppFabric Build $((Get-Item $SharePointCmdletModule).Directory.BaseName)" {
         InModuleScope $ModuleName {
             $testParams = @{
                 Build = '1.0.4657.2'
