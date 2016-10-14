@@ -13,10 +13,10 @@
             [PSCredential]
             $SetupAccount
         )
-        Import-DscResource -ModuleName xAppFabric
+        Import-DscResource -ModuleName AppFabricDsc
 
         node localhost {
-            xAFInstallCumulativeUpdate InstallAppFabricCU7
+            AFInstallCumulativeUpdate InstallAppFabricCU7
             {
                 SetupFile  = "C:\SPAppFabricUpdate\AppFabric-KB3092423-x64-ENU.exe"
                 Build = '1.0.4657.2' #CU 07
