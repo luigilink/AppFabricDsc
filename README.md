@@ -11,7 +11,7 @@ Please leave comments, feature requests, and bug reports in the issues tab for t
 
 If you would like to modify AppFabricDsc module, please feel free.  
 As specified in the license, you may copy or modify this resource as long as they are used on the Windows Platform.
-Please refer to the [Contribution Guidelines](https://github.com/luigilink/xAppFabric/wiki/Contributing) for information about style guides, testing and patterns for contributing to DSC resources.
+Please refer to the [Contribution Guidelines](https://github.com/luigilink/AppFabricDsc/wiki/Contributing) for information about style guides, testing and patterns for contributing to DSC resources.
 
 ## Installation
 
@@ -29,11 +29,11 @@ To confirm installation, run the below command and ensure you see the SharePoint
 
 The minimum PowerShell version required is 4.0, which ships in Windows 8.1 or Windows Server 2012R2 (or higher versions).
 The preferred version is PowerShell 5.0 or higher, which ships with Windows 10 or Windows Server 2016. 
-This is discussed [on the AppFabricDsc wiki](https://github.com/PowerShell/xAppFabric/wiki/Remote%20sessions%20and%20the%20InstallAccount%20variable), but generally PowerShell 5 will run the SharePoint DSC resources faster and with improved verbose level logging.
+This is discussed [on the AppFabricDsc wiki](https://github.com/PowerShell/AppFabricDsc/wiki/Remote%20sessions%20and%20the%20InstallAccount%20variable), but generally PowerShell 5 will run the SharePoint DSC resources faster and with improved verbose level logging.
 
 ## Documentation and examples
 
-For a full list of resources in AppFabricDsc and examples on their use, check out the [AppFabricDsc wiki](https://github.com/PowerShell/xAppFabric/wiki).
+For a full list of resources in AppFabricDsc and examples on their use, check out the [AppFabricDsc wiki](https://github.com/PowerShell/AppFabricDsc/wiki).
 You can also review the "examples" directory in the AppFabricDsc module for some general use scenarios for all of the resources that are in the module.
 
 ## Changelog
