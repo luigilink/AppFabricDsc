@@ -12,7 +12,7 @@
 # RootModule = ''
 
 # Version number of this module.
-ModuleVersion = '0.1.0.0'
+ModuleVersion = '0.2.0.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -66,13 +66,15 @@ Description = 'This DSC module is used to deploy and configure AppFabric.'
 # FormatsToProcess = @()
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-# NestedModules = @()
+NestedModules = @("modules\AppFabricDsc.Util\AppFabricDsc.Util.psm1")
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @()
+#FunctionsToExport = @()
 
-# Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = @()
+# Cmdlets to export from this module
+CmdletsToExport = @('Get-AFDscInstalledProductVersion',
+                   'Get-AFDscInstalledProductPath',
+                   'Test-AFDscParameterState')
 
 # Variables to export from this module
 VariablesToExport = '*'

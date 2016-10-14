@@ -13,8 +13,12 @@ function Get-TargetResource
         $SetupFile
     )
 
-    Write-Verbose -Message 'Getting AppFabric ProductVersion from Microsoft.ApplicationServer.Caching.Configuration.dll'
-    $afConfDLL = "$env:ProgramFiles\AppFabric 1.1 for Windows Server\PowershellModules\DistributedCacheConfiguration\Microsoft.ApplicationServer.Caching.Configuration.dll"
+    Write-Verbose -Message ("Getting AppFabric ProductVersion from " + `
+                            "Microsoft.ApplicationServer.Caching.Configuration.dll")
+    $getAFInstalledProductPath = Get-AFDscInstalledProductPath
+    $afConfDLL = Join-Path -Path $getAFInstalledProductPath `
+                           -ChildPath ("PowershellModules\DistributedCacheConfiguration\" + `
+                                       "Microsoft.ApplicationServer.Caching.Configuration.dll")
     if(Test-Path -Path $afConfDLL)
     {
         $afInstall = (Get-ItemProperty -Path $afConfDLL -Name VersionInfo)
@@ -31,7 +35,6 @@ function Get-TargetResource
         SetupFile = $SetupFile
     }
 }
-
 
 function Set-TargetResource
 {
@@ -87,7 +90,6 @@ function Set-TargetResource
     }
 }
 
-
 function Test-TargetResource
 {
     [CmdletBinding()]
@@ -119,6 +121,4 @@ function Test-TargetResource
     }
 }
 
-
 Export-ModuleMember -Function *-TargetResource
-
