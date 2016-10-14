@@ -8,11 +8,7 @@
 
     Configuration Example 
     {
-        param(
-            [Parameter(Mandatory = $true)]
-            [PSCredential]
-            $SetupAccount
-        )
+        param()
         Import-DscResource -ModuleName AppFabricDsc
 
         node localhost {
