@@ -1,7 +1,7 @@
 # Change log for AppFabricDsc
 
 ### 0.2.0.0
- * Rename AppFabricDsc by AppFabricDsc
+ * Rename xAppFabricDsc by AppFabricDsc
  * Add Pull Request and Issue templates
  * Update appveyor.xml file
  * Update README.md
