@@ -1,9 +1,9 @@
 [CmdletBinding()]
 param(
-    [String] $WACCmdletModule = (Join-Path $PSScriptRoot "\Stubs\1.1.2106.32\AppFabricServer.psm1" -Resolve)
+    [String] $AFSCmdletModule = (Join-Path $PSScriptRoot "\Stubs\AppFabricServer.psm1" -Resolve)
 )
 
-$Global:CurrentWACCmdletModule = $WACCmdletModule
+$Global:CurrentAFSCmdletModule = $AFSCmdletModule
 
 [String] $moduleRoot = Join-Path -Path $PSScriptRoot -ChildPath "..\..\Modules\AppFabricDsc" -Resolve
 if ( (-not (Test-Path -Path (Join-Path -Path $moduleRoot -ChildPath 'DSCResource.Tests'))) -or `
@@ -15,10 +15,10 @@ if ( (-not (Test-Path -Path (Join-Path -Path $moduleRoot -ChildPath 'DSCResource
 Import-Module (Join-Path $PSScriptRoot "..\..\Modules\AppFabricDsc\Modules\AppFabricDsc.Util\AppFabricDsc.Util.psm1" -Resolve)
 
 InModuleScope "AppFabricDsc.Util" {
-    Describe "AppFabricDsc.Util tests [WAC server version $((Get-Item $Global:CurrentWACCmdletModule).Directory.BaseName)]" {
+    Describe "AppFabricDsc.Util tests [AppFabric server]" {
 
         Remove-Module -Name "AppFabricServer" -Force -ErrorAction SilentlyContinue
-        Import-Module $Global:CurrentWACCmdletModule -WarningAction SilentlyContinue 
+        Import-Module $Global:CurrentAFSCmdletModule -WarningAction SilentlyContinue 
 
         Context "Validate Test-AFDscParameterState" {
             It "Returns true for two identical tables" {

@@ -15,37 +15,28 @@ function Invoke-AFSDscUnitTestSuite() {
         Write-Warning -Message ("Code coverage statistics are being calculated. This will slow the " + `
                                 "start of the tests by several minutes while the code matrix is " + `
                                 "built. Please be patient")
-        Get-ChildItem "$repoDir\modules\AppFabricDsc\**\*.psm1" -Recurse | ForEach-Object { 
+        Get-ChildItem "$repoDir\modules\AppFabricDsc\*.psm1" -Recurse | ForEach-Object { 
             if ($_.FullName -notlike "*\DSCResource.Tests\*") {
                 $testCoverageFiles += $_.FullName    
             }
         }    
     }
     
-
     $testResultSettings = @{ }
     if ([String]::IsNullOrEmpty($TestResultsFile) -eq $false) {
         $testResultSettings.Add("OutputFormat", "NUnitXml" )
         $testResultSettings.Add("OutputFile", $TestResultsFile)
     }
     Import-Module "$repoDir\modules\AppFabricDsc\AppFabricDsc.psd1"
-    
-    
-    $versionsToTest = (Get-ChildItem (Join-Path $repoDir "\Tests\Unit\Stubs\")).Name
-    
-    # Import the first stub found so that there is a base module loaded before the tests start
-    $firstVersion = $versionsToTest | Select-Object -First 1
-    Import-Module (Join-Path $repoDir "\Tests\Unit\Stubs\$firstVersion\AppFabricServer.psm1") -WarningAction SilentlyContinue
+    Import-Module (Join-Path $repoDir "\Tests\Unit\Stubs\AppFabricServer.psm1") -WarningAction SilentlyContinue
 
     $testsToRun = @()
-    $versionsToTest | ForEach-Object {
-        $testsToRun += @(@{
-            'Path' = (Join-Path -Path $repoDir -ChildPath "\Tests\Unit")
-            'Parameters' = @{ 
-                'WACCmdletModule' = (Join-Path $repoDir "\Tests\Unit\Stubs\$_\AppFabricServer.psm1")
-            }
-        })
-    }
+    $testsToRun += @(@{
+        'Path' = (Join-Path -Path $repoDir -ChildPath "\Tests\Unit")
+        'Parameters' = @{ 
+            'AFSCmdletModule' = (Join-Path $repoDir "\Tests\Unit\Stubs\AppFabricServer.psm1")
+        }
+    })
     
     if ($PSBoundParameters.ContainsKey("DscTestsPath") -eq $true) {
         $testsToRun += @{
