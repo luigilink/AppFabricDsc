@@ -11,8 +11,8 @@
 .vs
 .psproj
 .sln
-Modules/OfficeOnlineServerDsc/DscResource.Tests
-Modules/OfficeOnlineServerDsc/DscResource.Tests/*
+Modules/AppFabricDsc/DscResource.Tests
+Modules/AppFabricDsc/DscResource.Tests/*
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

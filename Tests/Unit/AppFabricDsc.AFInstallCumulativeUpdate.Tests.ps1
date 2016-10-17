@@ -1,63 +1,64 @@
+[CmdletBinding()]
+param(
+    [String] $AFSCmdletModule = (Join-Path $PSScriptRoot "\Stubs\AppFabricServer.psm1" -Resolve)
+)
 
-$ErrorActionPreference = 'stop'
-Set-StrictMode -Version latest
+$Script:DSCModuleName      = 'AppFabricDsc'
+$Script:DSCResourceName    = 'MSFT_AFInstallCumulativeUpdate'
+$Global:CurrentAFSCmdletModule = $AFSCmdletModule
+$Global:AFInstalledPath = 'C:\Program Files\App Fabric Server\1.1 for Windows Server'
 
-$script:DSCModuleName      = 'AppFabricDsc'
-$script:DSCResourceName    = 'MSFT_AFInstallCumulativeUpdate'
-
-#region HEADER
-
-# Unit Test Template Version: 1.1.0
-[String] $script:moduleRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
-if ( (-not (Test-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath 'DSCResource.Tests'))) -or `
-     (-not (Test-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath 'DSCResource.Tests\TestHelper.psm1'))) )
+[String] $moduleRoot = Join-Path -Path $PSScriptRoot -ChildPath "..\..\Modules\AppFabricDsc" -Resolve
+if ( (-not (Test-Path -Path (Join-Path -Path $moduleRoot -ChildPath 'DSCResource.Tests'))) -or `
+     (-not (Test-Path -Path (Join-Path -Path $moduleRoot -ChildPath 'DSCResource.Tests\TestHelper.psm1'))) )
 {
-    & git @('clone','https://github.com/PowerShell/DscResource.Tests.git',(Join-Path -Path $script:moduleRoot -ChildPath '\DSCResource.Tests\'))
+    & git @('clone','https://github.com/PowerShell/DscResource.Tests.git',(Join-Path -Path $moduleRoot -ChildPath '\DSCResource.Tests\'))
 }
-
-Import-Module (Join-Path -Path $script:moduleRoot -ChildPath 'DSCResource.Tests\TestHelper.psm1') -Force
-
+Import-Module (Join-Path -Path $moduleRoot -ChildPath 'DSCResource.Tests\TestHelper.psm1') -Force
 $TestEnvironment = Initialize-TestEnvironment `
-    -DSCModuleName $script:DSCModuleName `
-    -DSCResourceName $script:DSCResourceName `
+    -DSCModuleName $Script:DSCModuleName `
+    -DSCResourceName $Script:DSCResourceName `
     -TestType Unit 
 
-#endregion HEADER
-
-# Begin Testing
 try
 {
-    Describe "AFInstallCumulativeUpdate - AppFabric Build $((Get-Item $SharePointCmdletModule).Directory.BaseName)" {
-        InModuleScope $ModuleName {
+    Describe "$script:DSCResourceName - $script:DSCModuleName Module" {
+        InModuleScope $script:DSCResourceName {
             $testParams = @{
                 Build = '1.0.4657.2'
                 SetupFile  = "C:\SPAppFabricUpdate\AppFabric-KB3092423-x64-ENU.exe"
             }
             
-            Import-Module (Join-Path ((Resolve-Path $PSScriptRoot\..\..\..).Path) "Modules\SharePointDsc")
-            
-            Mock Invoke-SPDSCCommand { 
-                return Invoke-Command -ScriptBlock $ScriptBlock -ArgumentList $Arguments -NoNewScope
-            }
-            
-            Remove-Module -Name "Microsoft.SharePoint.PowerShell" -Force -ErrorAction SilentlyContinue
-            Import-Module $Global:CurrentSharePointStubModule -WarningAction SilentlyContinue 
+            Import-Module (Join-Path $PSScriptRoot "..\..\Modules\AppFabricDsc" -Resolve)
+            Import-Module $Global:CurrentAFSCmdletModule -WarningAction SilentlyContinue 
 
             Context "AppFabric Cumulative Update are not installed but should be" {
+                Mock Get-AFDscInstalledProductPath { return $Global:AFInstalledPath }
                 Mock Test-Path { return $false }
                 Mock Get-ItemProperty { return @{
                     VersionInfo = [pscustomobject]@{
                         ProductVersion = '1.0.4639.0'
                         }
                     }
-                } 
+                }
 
-                It "returns false from the test method"  {
+                $result = Get-TargetResource @testParams
+
+                It 'Should return the same values as passed as parameters' {
+                    $result.SetupFile | Should Be $testParams.SetupFile
+                }
+
+                It "Should return 0.0.0.0 as the build version" {
+                    $result.Build | Should Be '0.0.0.0'
+                }
+
+                It "Should return false from the test method"  {
                     Test-TargetResource @testParams | Should Be $false
                 }
             }
 
             Context "AppFabric Cumulative Update are installed and should be" {
+                Mock Get-AFDscInstalledProductPath { return $Global:AFInstalledPath }
                 Mock Test-Path { return $true }
                 Mock Get-ItemProperty { return @{
                     VersionInfo = [pscustomobject]@{
@@ -65,13 +66,21 @@ try
                         }
                     }
                 } 
-                
-                It "returns true from the test method" {
+                                
+                $result = Get-TargetResource @testParams
+
+                It 'Should return the same values as passed as parameters' {
+                    $result.Build | Should Be $testParams.Build
+                    $result.SetupFile | Should Be $testParams.SetupFile
+                }
+
+                It "Should return true from the test method" {
                     Test-TargetResource @testParams | Should Be $true
                 }
             }
 
             Context "AppFabric Cumulative Update installation executes as expected" {
+                Mock Get-AFDscInstalledProductPath { return $Global:AFInstalledPath }
                 Mock Test-Path { return $true }
                 Mock Get-ItemProperty { return @{
                     VersionInfo = [pscustomobject]@{
@@ -95,6 +104,7 @@ try
             }
 
             Context "AppFabric Cumulative Update installation fails" {
+                Mock Get-AFDscInstalledProductPath { return $Global:AFInstalledPath }
                 Mock Test-Path { return $true }
                 Mock Get-ItemProperty { return @{
                     VersionInfo = [pscustomobject]@{
@@ -113,10 +123,5 @@ try
 }
 finally
 {
-    #region FOOTER
-
     Restore-TestEnvironment -TestEnvironment $TestEnvironment 
-
-    #endregion
 }
-
