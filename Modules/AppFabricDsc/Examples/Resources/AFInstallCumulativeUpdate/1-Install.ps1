@@ -6,17 +6,17 @@
     is the default name from https://www.microsoft.com/en-us/download/details.aspx?id=49171.
 #>
 
-    Configuration Example 
-    {
-        param()
-        Import-DscResource -ModuleName AppFabricDsc
+Configuration Example 
+{
+    param()
+    Import-DscResource -ModuleName AppFabricDsc
 
-        node localhost {
-            AFInstallCumulativeUpdate InstallAppFabricCU7
-            {
-                SetupFile  = "C:\SPAppFabricUpdate\AppFabric-KB3092423-x64-ENU.exe"
-                Build = '1.0.4657.2' #CU 07
-            }
+    node localhost {
+        AFInstallCumulativeUpdate InstallAppFabricCU7
+        {
+            SetupFile  = "C:\SPAppFabricUpdate\AppFabric-KB3092423-x64-ENU.exe"
+            Build = '1.0.4657.2' #CU 07
         }
-
     }
+
+}

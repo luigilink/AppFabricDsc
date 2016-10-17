@@ -16,19 +16,28 @@ function Get-TargetResource
     Write-Verbose -Message ("Getting AppFabric ProductVersion from " + `
                             "Microsoft.ApplicationServer.Caching.Configuration.dll")
     $getAFInstalledProductPath = Get-AFDscInstalledProductPath
-    $afConfDLL = Join-Path -Path $getAFInstalledProductPath `
-                           -ChildPath ("PowershellModules\DistributedCacheConfiguration\" + `
-                                       "Microsoft.ApplicationServer.Caching.Configuration.dll")
-    if(Test-Path -Path $afConfDLL)
+    
+    if ($getAFInstalledProductPath)
     {
-        $afInstall = (Get-ItemProperty -Path $afConfDLL -Name VersionInfo)
-        $Build = $afInstall.VersionInfo.ProductVersion
+        $afConfDLL = Join-Path -Path $getAFInstalledProductPath `
+                            -ChildPath ("PowershellModules\DistributedCacheConfiguration\" + `
+                                        "Microsoft.ApplicationServer.Caching.Configuration.dll")
+        if(Test-Path -Path $afConfDLL)
+        {
+            $afInstall = (Get-ItemProperty -Path $afConfDLL -Name VersionInfo)
+            $Build = $afInstall.VersionInfo.ProductVersion
+        }
+        else
+        {
+            Write-Verbose -Message 'AppFabric not installed'
+            [Version]$Build = '0.0.0.0'
+        }
     }
     else
     {
-        Write-Verbose -Message 'AppFabric not installed'
+        throw [Exception] 'AppFabric must be installed before applying Cumulative Updates'
         [Version]$Build = '0.0.0.0'
-    }
+    }    
     
     return @{
         Build = $Build

@@ -15,5 +15,5 @@ Your contribution to this project is greatly appreciated!
 - [ ] Added/updated documentation and descriptions in .schema.mof files where appropriate?
 - [ ] Examples appropriately updated?
 - [ ] New/changed code adheres to [Style Guidelines]?(https://github.com/PowerShell/DscResources/blob/master/StyleGuidelines.md)?
-- [ ] [Unit and Integration tests](https://github.com/PowerShell/DscResources/blob/master/TestsGuidelines.md) created/updated where possible?
+- [ ] [Unit tests](https://github.com/PowerShell/DscResources/blob/master/TestsGuidelines.md) created/updated where possible?
 

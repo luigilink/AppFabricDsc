@@ -1,9 +1,5 @@
 # Change log for AppFabricDsc
 
-### Unreleased
-
- * Manage Start/stop Service
-
 ### 0.2.0.0
  * Rename AppFabricDsc by AppFabricDsc
  * Add Pull Request and Issue templates

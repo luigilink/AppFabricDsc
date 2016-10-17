@@ -17,7 +17,6 @@ Import-Module (Join-Path $PSScriptRoot "..\..\Modules\AppFabricDsc\Modules\AppFa
 InModuleScope "AppFabricDsc.Util" {
     Describe "AppFabricDsc.Util tests [AppFabric server]" {
 
-        Remove-Module -Name "AppFabricServer" -Force -ErrorAction SilentlyContinue
         Import-Module $Global:CurrentAFSCmdletModule -WarningAction SilentlyContinue 
 
         Context "Validate Test-AFDscParameterState" {
