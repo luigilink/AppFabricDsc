@@ -1,0 +1,9 @@
+[ClassVersion("1.0.0.0"), FriendlyName("AFInstall")]
+class MSFT_AFInstall : OMI_BaseResource
+{
+    [Key, Description("Set to 'present' to specificy that the product should be installed."), ValueMap{"Present","Absent"}, Values{"Present","Absent"}] String Ensure;
+    [Required, Description("Path to setup.exe")] String Path;
+    [Write, Description("Specificy AppFabric Features will be installed"), ValueMap{"hostingservices","hostingadmin","cachingservice","cacheclient","cacheadmin"}, Values{"hostingservices","hostingadmin","cachingservice","cacheclient","cacheadmin"}] String Features[];
+    [Write, Description("Install all assemblies associated with the specified features into the Global Assembly Cache (GAC).")] Boolean Gac;
+    [Write, Description("Check for updates after AppFabric Server setup completes.")] Boolean EnableUpdate;
+};
