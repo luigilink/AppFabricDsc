@@ -10,7 +10,9 @@ function Get-AFDscInstalledProductVersion
     [OutputType([Version])]
     param()
 
-    return Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | `
+    $uninstallPath = Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*
+
+    return $uninstallPath | `
         Select-Object DisplayName, DisplayVersion | `
         Where-Object {
             $_.DisplayName -match "AppFabric 1.1"
@@ -31,7 +33,9 @@ function Get-AFDscInstalledProductPath
     [OutputType([String])]
     param()
 
-    return Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | `
+    $uninstallPath = Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*
+
+    return $uninstallPath | `
         Select-Object DisplayName, InstallLocation | `
         Where-Object {
             $_.DisplayName -match "AppFabric 1.1"
@@ -89,20 +93,19 @@ function Test-AFDscParameterState
 
     if (($DesiredValues.GetType().Name -eq "CimInstance") -and ($null -eq $ValuesToCheck)) 
     {
-        throw ("If 'DesiredValues' is a CimInstance then property 'ValuesToCheck' must contain " + `
-               "a value")
+        throw "If 'DesiredValues' is a CimInstance then property 'ValuesToCheck' must contain a value"
     }
 
     if (($null -eq $ValuesToCheck) -or ($ValuesToCheck.Count -lt 1)) 
     {
-        $KeyList = $DesiredValues.Keys
+        $keyList = $DesiredValues.Keys
     } 
     else 
     {
-        $KeyList = $ValuesToCheck
+        $keyList = $ValuesToCheck
     }
 
-    $KeyList | ForEach-Object -Process {
+    $keyList | ForEach-Object -Process {
         if (($_ -ne "Verbose")) 
         {
             if (($CurrentValues.ContainsKey($_) -eq $false) `
@@ -113,14 +116,14 @@ function Test-AFDscParameterState
                     $DesiredValues.GetType().Name -eq "PSBoundParametersDictionary") 
                 {
                     
-                    $CheckDesiredValue = $DesiredValues.ContainsKey($_)
+                    $checkDesiredValue = $DesiredValues.ContainsKey($_)
                 } 
                 else 
                 {
-                    $CheckDesiredValue = Test-SPDSCObjectHasProperty $DesiredValues $_
+                    $checkDesiredValue = Test-SPDSCObjectHasProperty $DesiredValues $_
                 }
 
-                if ($CheckDesiredValue) 
+                if ($checkDesiredValue) 
                 {
                     $desiredType = $DesiredValues.$_.GetType()
                     $fieldName = $_

@@ -18,5 +18,4 @@ Configuration Example
             Build = '1.0.4657.2' #CU 07
         }
     }
-
 }

@@ -1,14 +1,28 @@
+<#
+.SYNOPSIS
+
+This function gets all Key properties defined in the resource schema file
+
+.PARAMETER Build
+
+This is the build number of the cumulative update used to check if already installed.
+
+.PARAMETER SetupFile
+
+This is the Full Path of the CU executable to launch
+
+#>
 function Get-TargetResource
 {
     [CmdletBinding()]
     [OutputType([System.Collections.Hashtable])]
     param
     (
-        [parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $Build,
 
-        [parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $SetupFile
     )
@@ -45,16 +59,30 @@ function Get-TargetResource
     }
 }
 
+<#
+.SYNOPSIS
+
+This function sets all Key properties defined in the resource schema file
+
+.PARAMETER Build
+
+This is the build number of the cumulative update used to check if already installed.
+
+.PARAMETER SetupFile
+
+This is the Full Path of the CU executable to launch
+
+#>
 function Set-TargetResource
 {
     [CmdletBinding()]
     param
     (
-        [parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $Build,
 
-        [parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $SetupFile
     )
@@ -99,17 +127,31 @@ function Set-TargetResource
     }
 }
 
+<#
+.SYNOPSIS
+
+This function tests all Key properties defined in the resource schema file
+
+.PARAMETER Build
+
+This is the build number of the cumulative update used to check if already installed.
+
+.PARAMETER SetupFile
+
+This is the Full Path of the CU executable to launch
+
+#>
 function Test-TargetResource
 {
     [CmdletBinding()]
     [OutputType([System.Boolean])]
     param
     (
-        [parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $Build,
 
-        [parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $SetupFile
     )

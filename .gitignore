@@ -13,6 +13,8 @@
 .sln
 Modules/AppFabricDsc/DscResource.Tests
 Modules/AppFabricDsc/DscResource.Tests/*
+DscResource.Tests
+DscResource.Tests/*
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

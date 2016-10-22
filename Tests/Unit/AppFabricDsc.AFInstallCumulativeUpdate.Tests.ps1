@@ -8,27 +8,38 @@ $Script:DSCResourceName    = 'MSFT_AFInstallCumulativeUpdate'
 $Global:CurrentAFSCmdletModule = $AFSCmdletModule
 $Global:AFInstalledPath = 'C:\Program Files\App Fabric Server\1.1 for Windows Server'
 
-[String] $moduleRoot = Join-Path -Path $PSScriptRoot -ChildPath "..\..\Modules\AppFabricDsc" -Resolve
-if ( (-not (Test-Path -Path (Join-Path -Path $moduleRoot -ChildPath 'DSCResource.Tests'))) -or `
-     (-not (Test-Path -Path (Join-Path -Path $moduleRoot -ChildPath 'DSCResource.Tests\TestHelper.psm1'))) )
+#region HEADER
+
+# Unit Test Template Version: 1.2.0
+[String] $script:moduleRoot = Join-Path -Path $PSScriptRoot -ChildPath "..\..\Modules\$Script:DSCModuleName" -Resolve
+if ( (-not (Test-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath 'DSCResource.Tests'))) -or `
+     (-not (Test-Path -Path (Join-Path -Path $script:moduleRoot -ChildPath 'DSCResource.Tests\TestHelper.psm1'))) )
 {
-    & git @('clone','https://github.com/PowerShell/DscResource.Tests.git',(Join-Path -Path $moduleRoot -ChildPath '\DSCResource.Tests\'))
+    & git @('clone','https://github.com/PowerShell/DscResource.Tests.git',(Join-Path -Path $script:moduleRoot -ChildPath '\DSCResource.Tests\'))
 }
-Import-Module (Join-Path -Path $moduleRoot -ChildPath 'DSCResource.Tests\TestHelper.psm1') -Force
+
+Import-Module (Join-Path -Path $script:moduleRoot -ChildPath 'DSCResource.Tests\TestHelper.psm1') -Force
+
 $TestEnvironment = Initialize-TestEnvironment `
     -DSCModuleName $Script:DSCModuleName `
     -DSCResourceName $Script:DSCResourceName `
     -TestType Unit 
 
+#endregion HEADER
+
+function Invoke-TestCleanup {
+    Restore-TestEnvironment -TestEnvironment $TestEnvironment
+}
+
+# Begin Testing
 try
 {
-    Describe "$script:DSCResourceName - $script:DSCModuleName Module" {
-        InModuleScope $script:DSCResourceName {
+     InModuleScope $script:DSCResourceName {
             $testParams = @{
                 Build = '1.0.4657.2'
                 SetupFile  = "C:\SPAppFabricUpdate\AppFabric-KB3092423-x64-ENU.exe"
             }
-            
+        Describe "MSFT_AFInstallCumulativeUpdate tests [AppFabric server]" {           
             Import-Module (Join-Path $PSScriptRoot "..\..\Modules\AppFabricDsc" -Resolve)
             Import-Module $Global:CurrentAFSCmdletModule -WarningAction SilentlyContinue 
 
@@ -123,5 +134,5 @@ try
 }
 finally
 {
-    Restore-TestEnvironment -TestEnvironment $TestEnvironment 
+    Invoke-TestCleanup
 }

@@ -1,31 +1,57 @@
-$Script:UninstallPath = "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"
-$script:InstallKeyPattern = "AppFabric"
+$Script:UninstallPath = 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall'
+$script:InstallKeyPattern = 'AppFabric'
 
+<#
+.SYNOPSIS
+
+This function gets all Key properties defined in the resource schema file
+
+.PARAMETER Ensure
+
+This is The Ensure Set to 'present' to specificy that the product should be installed.
+
+.PARAMETER Path
+
+This is the full path of setup.exe
+
+.PARAMETER Features
+
+This is a list for the AppFabric Features that will be installed
+
+.PARAMETER Gac
+
+This is boolean for install all assemblies associated with the specified features into the Global Assembly Cache
+
+.PARAMETER EnableUpdate
+
+This is boolean that enable updates after AppFabric Server setup complete
+
+#>
 function Get-TargetResource
 {
     [CmdletBinding()]
     [OutputType([System.Collections.Hashtable])]
     param
     (
-        [parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [System.String]
         [ValidateSet("Present", "Absent")]
         $Ensure = "Present",
 
-        [parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $Path,
                 
-        [parameter(Mandatory = $false)]
-        [ValidateSet("hostingservices","hostingadmin","cachingservice","cacheclient","cacheadmin")]
+        [Parameter(Mandatory = $false)]
         [System.String[]]
+        [ValidateSet("hostingservices","hostingadmin","cachingservice","cacheclient","cacheadmin")]
         $Features,
 
-        [parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false)]
         [System.Boolean]
         $Gac,
 
-        [parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false)]
         [System.Boolean]
         $EnableUpdate
     )
@@ -54,30 +80,56 @@ function Get-TargetResource
     }
 }
 
+<#
+.SYNOPSIS
+
+This function sets all Key properties defined in the resource schema file
+
+.PARAMETER Ensure
+
+This is The Ensure Set to 'present' to specificy that the product should be installed.
+
+.PARAMETER Path
+
+This is the full path of setup.exe
+
+.PARAMETER Features
+
+This is a list for the AppFabric Features that will be installed
+
+.PARAMETER Gac
+
+This is boolean for install all assemblies associated with the specified features into the Global Assembly Cache
+
+.PARAMETER EnableUpdate
+
+This is boolean that enable updates after AppFabric Server setup complete
+
+#>
 function Set-TargetResource
 {
     [CmdletBinding()]
     param
     (
-        [parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [System.String]
         [ValidateSet("Present", "Absent")]
         $Ensure = "Present",
 
-        [parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $Path,
         
-        [parameter(Mandatory = $false)]
-        [ValidateSet("hostingservices","hostingadmin","cachingservice","cacheclient","cacheadmin")]
+        [Parameter(Mandatory = $false)]
         [System.String[]]
+        [ValidateSet("hostingservices","hostingadmin","cachingservice","cacheclient","cacheadmin")]
         $Features,
 
-        [parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false)]
         [System.Boolean]
         $Gac,
 
-        [parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false)]
         [System.Boolean]
         $EnableUpdate
     )
@@ -121,7 +173,8 @@ function Set-TargetResource
                                -Wait `
                                -PassThru
 
-    switch ($installer.ExitCode) {
+    switch ($installer.ExitCode) 
+    {
         0 { 
             Write-Verbose -Message "Installation of AppFabric Server succeeded."
          }
@@ -133,31 +186,57 @@ function Set-TargetResource
     }
 }
 
+<#
+.SYNOPSIS
+
+This function tests all Key properties defined in the resource schema file
+
+.PARAMETER Ensure
+
+This is The Ensure Set to 'present' to specificy that the product should be installed.
+
+.PARAMETER Path
+
+This is the full path of setup.exe
+
+.PARAMETER Features
+
+This is a list for the AppFabric Features that will be installed
+
+.PARAMETER Gac
+
+This is boolean for install all assemblies associated with the specified features into the Global Assembly Cache
+
+.PARAMETER EnableUpdate
+
+This is boolean that enable updates after AppFabric Server setup complete
+
+#>
 function Test-TargetResource
 {
     [CmdletBinding()]
     [OutputType([System.Boolean])]
     param
     (
-        [parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [System.String]
         [ValidateSet("Present", "Absent")]
         $Ensure = "Present",
 
-        [parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [System.String]
         $Path,
                 
-        [parameter(Mandatory = $false)]
-        [ValidateSet("hostingservices","hostingadmin","cachingservice","cacheclient","cacheadmin")]
+        [Parameter(Mandatory = $false)]
         [System.String[]]
+        [ValidateSet("hostingservices","hostingadmin","cachingservice","cacheclient","cacheadmin")]
         $Features,
 
-        [parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false)]
         [System.Boolean]
         $Gac,
 
-        [parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false)]
         [System.Boolean]
         $EnableUpdate
     )

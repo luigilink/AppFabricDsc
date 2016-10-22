@@ -1,9 +1,18 @@
-function Invoke-AFSDscUnitTestSuite() {
+function Invoke-AFSDscUnitTestSuite() 
+{
     param
     (
-        [parameter(Mandatory = $false)] [System.String]  $TestResultsFile,
-        [parameter(Mandatory = $false)] [System.String]  $DscTestsPath,
-        [parameter(Mandatory = $false)] [System.Boolean] $CalculateTestCoverage = $true
+        [parameter(Mandatory = $false)]
+        [System.String]
+        $TestResultsFile,
+
+        [parameter(Mandatory = $false)]
+        [System.String]
+        $DscTestsPath,
+
+        [parameter(Mandatory = $false)]
+        [System.Boolean]
+        $CalculateTestCoverage = $true
     )
 
     Write-Verbose -Message "Commencing AppFabricDsc unit tests"
@@ -11,20 +20,23 @@ function Invoke-AFSDscUnitTestSuite() {
     $repoDir = Join-Path $PSScriptRoot "..\..\" -Resolve
 
     $testCoverageFiles = @()
-    if ($CalculateTestCoverage -eq $true) {
+    if ($CalculateTestCoverage -eq $true)
+    {
         Write-Warning -Message ("Code coverage statistics are being calculated. This will slow the " + `
                                 "start of the tests by several minutes while the code matrix is " + `
                                 "built. Please be patient")
-        Get-ChildItem "$repoDir\modules\AppFabricDsc\*.psm1" -Recurse | ForEach-Object { 
-            if ($_.FullName -notlike "*\DSCResource.Tests\*") {
+        Get-ChildItem "$repoDir\modules\AppFabricDsc\*.psm1" -Recurse | ForEach-Object -Process { 
+            if ($_.FullName -notlike "*\DSCResource.Tests\*")
+            {
                 $testCoverageFiles += $_.FullName    
             }
         }    
     }
     
     $testResultSettings = @{ }
-    if ([String]::IsNullOrEmpty($TestResultsFile) -eq $false) {
-        $testResultSettings.Add("OutputFormat", "NUnitXml" )
+    if ([String]::IsNullOrEmpty($TestResultsFile) -eq $false)
+    {
+        $testResultSettings.Add("OutputFormat", "NUnitXml")
         $testResultSettings.Add("OutputFile", $TestResultsFile)
     }
     Import-Module "$repoDir\modules\AppFabricDsc\AppFabricDsc.psd1"
@@ -38,18 +50,23 @@ function Invoke-AFSDscUnitTestSuite() {
         }
     })
     
-    if ($PSBoundParameters.ContainsKey("DscTestsPath") -eq $true) {
+    if ($PSBoundParameters.ContainsKey("DscTestsPath") -eq $true)
+    {
         $testsToRun += @{
             'Path' = $DscTestsPath
             'Parameters' = @{ }
         }
     }
     $previousVerbosePreference = $Global:VerbosePreference 
-    try {
+    try
+    {
         $Global:VerbosePreference = "SilentlyContinue"
-        $results = Invoke-Pester -Script $testsToRun -CodeCoverage $testCoverageFiles -PassThru @testResultSettings    
+        $results = Invoke-Pester -Script $testsToRun `
+            -CodeCoverage $testCoverageFiles 
+            -PassThru @testResultSettings    
     }
-    finally {
+    finally
+    {
         $Global:VerbosePreference = $previousVerbosePreference
     }
     
