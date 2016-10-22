@@ -1,4 +1,7 @@
 # AppFabricDsc
+
+Build status: [![Build status](https://ci.appveyor.com/api/projects/status/baacdt4ll6mly9mp/branch/master?svg=true)](https://ci.appveyor.com/project/PowerShell/AppFabricDsc/branch/master)
+
 The **AppFabricDsc** module contains DSC resources for deployment and configuration of AppFabric in a way that is fully compliant with the requirements of System Center.
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).

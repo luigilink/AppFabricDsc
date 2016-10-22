@@ -62,7 +62,7 @@ function Invoke-AFSDscUnitTestSuite()
     {
         $Global:VerbosePreference = "SilentlyContinue"
         $results = Invoke-Pester -Script $testsToRun `
-            -CodeCoverage $testCoverageFiles 
+            -CodeCoverage $testCoverageFiles `
             -PassThru @testResultSettings    
     }
     finally
